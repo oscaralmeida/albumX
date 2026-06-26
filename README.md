@@ -80,6 +80,15 @@ A segunda evolução adiciona inteligência e engajamento ao sistema:
 
 # MVP — Sistema de Troca de Figurinhas da Copa
 
+## Iniciando o Spec
+
+```text
+specify init albumX
+cd albumX
+```
+
+---
+
 ## 1. Prompt — Constituição do Projeto
 
 ```text
