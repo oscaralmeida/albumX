@@ -604,6 +604,17 @@ Fora do escopo desta evolução:
 - Chat entre usuários.
 - Interface gráfica avançada.
 
+Interface do usuário:
+
+A interface web deve evoluir para suportar o fluxo de troca.
+
+Novas capacidades no frontend:
+
+- Permitir que o usuário visualize propostas de troca recebidas.
+- Permitir aceitar uma troca via interface.
+- Permitir recusar uma troca via interface.
+- Exibir status da troca (PROPOSED, ACCEPTED, REJECTED).
+
 Gere a especificação funcional completa da Evolução 1, mantendo compatibilidade com o MVP.
 ```
 
@@ -675,6 +686,19 @@ Testes esperados:
 - Deve impedir aceitar troca sem figurinha disponível.
 - Deve impedir troca injusta.
 - Deve validar regra opcional de não trocar figurinha única.
+
+Frontend:
+
+- Deve ser atualizado para suportar o fluxo de avaliação de trocas.
+- Criar telas ou componentes para:
+  - listar trocas recebidas;
+  - aceitar troca;
+  - recusar troca;
+  - visualizar status.
+
+Integração:
+
+- Frontend deve consumir novos endpoints de aceite e recusa.
 
 Gere um plano técnico claro e incremental para implementar a Evolução 1 sem quebrar o comportamento do MVP.
 ```
@@ -751,6 +775,16 @@ Tarefas esperadas:
    - Garantir que a troca só altera coleções após validações.
    - Garantir que não foram adicionadas funcionalidades da Evolução 2.
 
+9. Frontend - evolução de troca
+   - Criar tela/listagem de trocas.
+   - Criar botão de aceitar troca.
+   - Criar botão de recusar troca.
+   - Exibir status da troca.
+   - Integrar com API.
+
+10. Teste de fluxo completo
+   - Validar troca via UI (não só API).
+
 Gere as tarefas em formato objetivo, numerado e pronto para execução.
 ```
 
@@ -803,6 +837,14 @@ Critérios de qualidade:
 - Centralizar regras de negócio.
 - Adicionar testes cobrindo fluxos de sucesso e erro.
 - Garantir que a implementação continue adequada para uso didático em treinamento.
+
+A implementação deve atualizar a interface web existente para suportar:
+
+- Visualização de trocas.
+- Ações de aceitar e recusar.
+- Exibição de status.
+
+O fluxo completo deve ser executável via browser.
 
 Implemente as tarefas na ordem definida e atualize ou crie testes conforme necessário.
 ```
@@ -885,6 +927,16 @@ Fora do escopo:
 - Machine learning.
 - Interface gráfica avançada.
 - Integração externa.
+
+Interface do usuário:
+
+A interface deve evoluir para incluir funcionalidades inteligentes.
+
+Novas capacidades no frontend:
+
+- Exibir sugestões automáticas de troca.
+- Permitir que o usuário utilize uma sugestão para criar uma proposta.
+- Exibir ranking de usuários.
 
 Gere a especificação funcional completa da Evolução 2, mantendo compatibilidade com o MVP e com a Evolução 1.
 ```
@@ -981,6 +1033,17 @@ Testes esperados:
 - Deve ordenar ranking por progresso no álbum.
 - Deve usar trocas aceitas como critério secundário quando aplicável.
 
+Frontend:
+
+- Criar novas telas:
+  - sugestões de troca;
+  - ranking de usuários.
+
+Integração:
+
+- Consumir endpoints de sugestões.
+- Consumir endpoints de ranking.
+
 Gere um plano técnico incremental, simples e adequado para treinamento.
 ```
 
@@ -1074,6 +1137,20 @@ Tarefas esperadas:
    - Garantir que ranking não altera dados do sistema.
    - Manter código simples e adequado ao treinamento.
 
+11. Frontend - sugestões
+   - Criar tela para listar sugestões.
+   - Exibir figurinha oferecida e recebida.
+   - Permitir criar troca a partir da sugestão.
+
+12. Frontend - ranking
+   - Criar tela de ranking.
+   - Exibir posição dos usuários.
+   - Mostrar percentual de conclusão.
+
+13. Integração frontend-backend
+   - Conectar sugestões com API.
+   - Conectar ranking com API.
+
 Gere as tarefas em formato numerado, objetivo e pronto para execução.
 ```
 
@@ -1144,6 +1221,14 @@ Critérios de qualidade:
 - Regras de negócio centralizadas.
 - Testes cobrindo sugestões e ranking.
 - Implementação adequada para demonstrar evolução incremental no treinamento.
+
+A interface web deve ser atualizada para incluir:
+
+- Tela de sugestões automáticas.
+- Tela de ranking.
+- Integração completa com os novos endpoints.
+
+A aplicação deve continuar sendo utilizável completamente via browser.
 
 Implemente as tarefas na ordem definida e garanta que todos os testes existentes continuem passando.
 ```
