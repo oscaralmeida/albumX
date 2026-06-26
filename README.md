@@ -98,6 +98,8 @@ Crie a constituição do projeto para um sistema simples de troca de figurinhas 
 
 O objetivo do projeto é demonstrar, de forma didática, como uma ideia de sistema pode evoluir a partir de especificações claras, planejamento técnico, divisão em tarefas e implementação orientada por IA.
 
+O sistema deve ser demonstrável em ambiente visual (browser), evitando dependência de ferramentas como Postman.
+
 Contexto do sistema:
 O sistema permite que usuários colecionem figurinhas de um álbum da Copa, registrem suas figurinhas, identifiquem figurinhas repetidas e proponham trocas com outros usuários.
 
@@ -215,6 +217,30 @@ Fora do escopo do MVP:
 - Interface gráfica complexa.
 - Autenticação de usuários.
 
+Experiência do usuário (interface):
+
+O sistema deve permitir interação simples via navegador, para fins didáticos no treinamento.
+
+Deve existir uma interface web básica que permita:
+
+- Cadastrar usuários por meio de formulário.
+- Cadastrar figurinhas na coleção de um usuário.
+- Visualizar coleção de figurinhas de um usuário.
+- Visualizar figurinhas repetidas.
+- Criar proposta de troca entre usuários.
+
+A interface não precisa ser sofisticada, mas deve ser funcional, simples e suficiente para demonstrar todas as funcionalidades do MVP.
+
+Documentação da API:
+
+- O sistema deve expor documentação automática da API via Swagger/OpenAPI.
+- Deve ser possível testar todos os endpoints diretamente pelo navegador.
+
+Execução da aplicação:
+
+- O sistema deve ser executável de forma simples, preferencialmente via Docker.
+- Um único comando deve permitir subir toda a aplicação.
+
 Gere a especificação em formato claro, estruturado e adequado para orientar as próximas fases do Spec Kit.
 ```
 
@@ -306,6 +332,35 @@ Testes esperados:
 - Deve criar proposta de troca válida.
 - Deve impedir proposta quando o usuário não possui a figurinha oferecida.
 
+Arquitetura da solução:
+
+A aplicação deve ser full stack e executável localmente.
+
+Componentes esperados:
+
+- Backend:
+  - API REST responsável pelas regras de negócio.
+  - Exposição de endpoints para usuários, coleção e trocas.
+
+- Frontend:
+  - Interface web simples (HTML, React, Vue ou semelhante).
+  - Deve consumir a API backend.
+  - Deve permitir realizar todas as ações do MVP via browser.
+
+- Documentação:
+  - Swagger/OpenAPI para documentação e testes da API.
+
+- Containerização:
+  - Dockerfile para backend.
+  - Dockerfile para frontend.
+  - docker-compose para orquestrar a aplicação completa.
+
+Execução esperada:
+
+- O sistema deve ser iniciado com docker-compose up.
+- O frontend deve estar acessível via navegador.
+- A API deve estar acessível e documentada via Swagger.
+
 Gere um plano técnico objetivo, com decisões de arquitetura, modelo de dados, principais componentes, casos de uso, validações e estratégia de testes.
 ```
 
@@ -378,6 +433,30 @@ Sugestão de organização das tarefas:
    - Garantir que as regras de negócio estejam centralizadas.
    - Validar se o projeto está pronto para evoluir para aceite/recusa de trocas.
 
+9. Documentação da API
+   - Configurar Swagger/OpenAPI.
+   - Documentar endpoints de usuários, coleção e troca.
+   - Garantir acesso via browser.
+
+10. Frontend (interface web)
+   - Criar interface simples para cadastro de usuários.
+   - Criar tela para adicionar figurinhas.
+   - Criar tela para listar coleção.
+   - Criar tela para visualizar repetidas.
+   - Criar tela para propor troca.
+   - Integrar frontend com API.
+
+11. Containerização
+   - Criar Dockerfile para backend.
+   - Criar Dockerfile para frontend.
+   - Criar docker-compose incluindo backend e frontend.
+   - Configurar portas para acesso via browser.
+
+12. Execução local
+   - Validar docker-compose up.
+   - Garantir que frontend abre no navegador.
+   - Garantir que Swagger está acessível.
+
 Gere as tarefas em formato numerado, com descrição objetiva e dependências quando necessário.
 ```
 
@@ -418,6 +497,33 @@ Critérios de qualidade:
 - Testes cobrindo os principais fluxos.
 - Nomes de classes, métodos e variáveis claros.
 - Implementação preparada para evoluir nas próximas fases.
+
+Objetivo final da implementação:
+
+O sistema deve ser executável de ponta a ponta, permitindo uso via navegador.
+
+Requisitos obrigatórios:
+
+- Deve existir um frontend funcional, acessível via browser.
+- Deve existir documentação Swagger acessível via browser.
+- Deve existir docker-compose para subir toda a aplicação.
+- A aplicação deve subir com um único comando:
+  docker-compose up
+
+Resultado esperado:
+
+Após subir a aplicação, deve ser possível:
+
+- Acessar a interface web.
+- Cadastrar usuários.
+- Adicionar figurinhas.
+- Consultar coleção.
+- Visualizar repetidas.
+- Criar propostas de troca.
+
+Critério de aceite final:
+
+A aplicação só é considerada concluída se puder ser utilizada completamente via browser, sem necessidade de ferramentas externas.
 
 Implemente as tarefas na ordem definida, garantindo que cada funcionalidade esteja coberta por testes.
 ```
