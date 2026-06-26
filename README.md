@@ -361,6 +361,17 @@ Execução esperada:
 - O frontend deve estar acessível via navegador.
 - A API deve estar acessível e documentada via Swagger.
 
+Controle de versão (Git):
+
+- O projeto deve utilizar Git para versionamento.
+- Cada fase do desenvolvimento deve ocorrer em uma branch dedicada.
+- Para o MVP, deve ser criada uma branch com nome:
+
+  feature/mvp-base
+
+- A implementação deve ocorrer nessa branch.
+- Ao final, as alterações devem ser commitadas com mensagens claras.
+
 Gere um plano técnico objetivo, com decisões de arquitetura, modelo de dados, principais componentes, casos de uso, validações e estratégia de testes.
 ```
 
