@@ -1,0 +1,13 @@
+.git
+.gitignore
+.cursor
+.specify
+specs
+README.md
+node_modules
+frontend/node_modules
+frontend/dist
+target
+*.log
+.env
+.env.*

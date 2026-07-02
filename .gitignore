@@ -1,0 +1,32 @@
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+.gradle/
+build/
+
+# Node / Frontend
+node_modules/
+dist/
+frontend/dist/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs e ambiente
+*.log
+.env
+.env.*
+
+# Coverage
+coverage/

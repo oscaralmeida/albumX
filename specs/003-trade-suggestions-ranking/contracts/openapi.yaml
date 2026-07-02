@@ -1,0 +1,503 @@
+openapi: 3.0.3
+
+info:
+  title: AlbumX API — Evolução 2 Sugestões e Ranking
+  description: |
+    Extensão da API com sugestões automáticas de troca e ranking de usuários.
+    Endpoints MVP e Evolução 1 permanecem inalterados em comportamento.
+  version: 1.2.0
+
+servers:
+  - url: http://localhost:8080
+    description: Desenvolvimento local / Docker Compose (backend)
+  - url: http://backend:8080
+    description: Rede interna Docker Compose
+
+tags:
+  - name: Users
+  - name: Collections
+  - name: Trades
+  - name: Suggestions
+  - name: Ranking
+
+paths:
+  /api/users:
+    post:
+      tags: [Users]
+      summary: Criar usuário
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: Usuário criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /api/users/{userId}:
+    get:
+      tags: [Users]
+      summary: Buscar usuário por ID
+      operationId: getUser
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: Usuário encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/users/{userId}/collection/stickers:
+    post:
+      tags: [Collections]
+      summary: Adicionar figurinha à coleção
+      operationId: addStickerToCollection
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddStickerRequest'
+      responses:
+        '200':
+          description: Figurinha adicionada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionEntryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/users/{userId}/collection:
+    get:
+      tags: [Collections]
+      summary: Listar coleção do usuário
+      operationId: getCollection
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: Coleção do usuário
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/users/{userId}/collection/duplicates:
+    get:
+      tags: [Collections]
+      summary: Listar figurinhas repetidas
+      operationId: getDuplicates
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: Figurinhas com quantidade > 1
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollectionEntryResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/users/{userId}/trade-suggestions:
+    get:
+      tags: [Suggestions]
+      summary: Consultar sugestões de troca para um usuário
+      description: |
+        Retorna oportunidades de troca mútua na perspectiva do usuário consultado.
+        Não altera coleções nem cria propostas automaticamente.
+      operationId: getTradeSuggestionsForUser
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: Lista de sugestões calculadas sob demanda
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TradeSuggestionResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/trade-suggestions:
+    get:
+      tags: [Suggestions]
+      summary: Consultar todas as sugestões de troca (visão global)
+      description: |
+        Retorna todas as oportunidades válidas entre pares de usuários.
+        Cada sugestão usa como solicitante o usuário com menor UUID do par (ordem estável).
+      operationId: getAllTradeSuggestions
+      responses:
+        '200':
+          description: Lista global de sugestões
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TradeSuggestionResponse'
+
+  /api/ranking:
+    get:
+      tags: [Ranking]
+      summary: Consultar ranking de usuários
+      description: |
+        Ranking ordenado por percentual de conclusão do álbum (decrescente),
+        desempate por trocas aceitas (decrescente).
+      operationId: getUserRanking
+      responses:
+        '200':
+          description: Lista ordenada com posições
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRankingResponse'
+
+  /api/trades:
+    post:
+      tags: [Trades]
+      summary: Criar proposta de troca
+      operationId: createTradeProposal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTradeRequest'
+      responses:
+        '201':
+          description: Proposta criada com status PROPOSED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeProposalResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    get:
+      tags: [Trades]
+      summary: Listar propostas de troca
+      operationId: listTradeProposals
+      parameters:
+        - name: requesterUserId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filtrar propostas enviadas pelo solicitante
+        - name: targetUserId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filtrar propostas recebidas pelo destinatário
+      responses:
+        '200':
+          description: Lista de propostas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TradeProposalResponse'
+
+  /api/trades/{tradeId}:
+    get:
+      tags: [Trades]
+      summary: Consultar proposta de troca por ID
+      operationId: getTradeProposal
+      parameters:
+        - $ref: '#/components/parameters/TradeId'
+      responses:
+        '200':
+          description: Proposta encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeProposalResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/trades/{tradeId}/accept:
+    post:
+      tags: [Trades]
+      summary: Aceitar proposta de troca (apenas destinatário)
+      operationId: acceptTradeProposal
+      parameters:
+        - $ref: '#/components/parameters/TradeId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TradeActionRequest'
+      responses:
+        '200':
+          description: Proposta aceita; coleções atualizadas; status ACCEPTED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeProposalResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /api/trades/{tradeId}/reject:
+    post:
+      tags: [Trades]
+      summary: Recusar proposta de troca (apenas destinatário)
+      operationId: rejectTradeProposal
+      parameters:
+        - $ref: '#/components/parameters/TradeId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TradeActionRequest'
+      responses:
+        '200':
+          description: Proposta recusada; status REJECTED; coleções inalteradas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeProposalResponse'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+components:
+  parameters:
+    UserId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    TradeId:
+      name: tradeId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    CreateUserRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          example: Maria Colecionadora
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+
+    AddStickerRequest:
+      type: object
+      required: [stickerNumber]
+      properties:
+        stickerNumber:
+          type: integer
+          minimum: 1
+          example: 42
+
+    CollectionEntryResponse:
+      type: object
+      properties:
+        stickerNumber:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 1
+
+    CollectionResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionEntryResponse'
+
+    CreateTradeRequest:
+      type: object
+      required:
+        - requesterUserId
+        - targetUserId
+        - offeredStickerNumber
+        - requestedStickerNumber
+      properties:
+        requesterUserId:
+          type: string
+          format: uuid
+        targetUserId:
+          type: string
+          format: uuid
+        offeredStickerNumber:
+          type: integer
+          minimum: 1
+        requestedStickerNumber:
+          type: integer
+          minimum: 1
+
+    TradeActionRequest:
+      type: object
+      required: [targetUserId]
+      properties:
+        targetUserId:
+          type: string
+          format: uuid
+          description: Identificador do destinatário que executa aceite ou recusa
+
+    TradeProposalResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        requesterUserId:
+          type: string
+          format: uuid
+        targetUserId:
+          type: string
+          format: uuid
+        offeredStickerNumber:
+          type: integer
+        requestedStickerNumber:
+          type: integer
+        status:
+          type: string
+          enum: [PROPOSED, ACCEPTED, REJECTED]
+        createdAt:
+          type: string
+          format: date-time
+
+    TradeSuggestionResponse:
+      type: object
+      properties:
+        requesterUserId:
+          type: string
+          format: uuid
+          description: Usuário na perspectiva do solicitante (userA)
+        partnerUserId:
+          type: string
+          format: uuid
+          description: Parceiro da troca (userB)
+        offeredStickerNumber:
+          type: integer
+          description: Figurinha oferecida pelo solicitante
+        requestedStickerNumber:
+          type: integer
+          description: Figurinha oferecida pelo parceiro (desejada pelo solicitante)
+        reason:
+          type: string
+          description: Texto explicativo da oportunidade
+      example:
+        requesterUserId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        partnerUserId: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        offeredStickerNumber: 10
+        requestedStickerNumber: 25
+        reason: "Troca mútua: você oferece #10, parceiro oferece #25"
+
+    UserRankingResponse:
+      type: object
+      properties:
+        position:
+          type: integer
+          minimum: 1
+          description: Posição ordinal no ranking (1 = melhor)
+        userId:
+          type: string
+          format: uuid
+        userName:
+          type: string
+        uniqueStickersCount:
+          type: integer
+          minimum: 0
+        albumCompletionPercentage:
+          type: number
+          format: double
+          description: Percentual de conclusão do álbum (0–100)
+        acceptedTradesCount:
+          type: integer
+          minimum: 0
+          description: Trocas com status ACCEPTED em que o usuário participou
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+  responses:
+    BadRequest:
+      description: Regra de negócio ou validação violada
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Recurso não encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Usuário não autorizado a executar a ação
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: Proposta já finalizada (ACCEPTED ou REJECTED)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

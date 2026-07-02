@@ -1139,52 +1139,6 @@ Implemente as tarefas na ordem definida e garanta que todos os testes existentes
 
 ---
 
-# Sugestão de uso no treinamento
-
-Você pode conduzir o treinamento como uma jornada incremental:
-
-```text
-MVP:
-Da ideia ao primeiro sistema funcional.
-
-Evolução 1:
-Adição de regras reais de negócio e controle de estado.
-
-Evolução 2:
-Evolução para funcionalidades inteligentes e engajamento.
-```
-
-Mensagem principal:
-
-> O Spec Kit permite transformar uma ideia simples em um sistema evolutivo, onde cada fase adiciona contexto, regras e implementação de forma controlada.
-
----
-
-# Estrutura sugerida do repositório
-
-```text
-.
-├── README.md
-├── prompts/
-│   ├── 01-mvp-constitution.md
-│   ├── 02-mvp-specify.md
-│   ├── 03-mvp-plan.md
-│   ├── 04-mvp-tasks.md
-│   ├── 05-mvp-implement.md
-│   ├── 06-evolucao-1-specify.md
-│   ├── 07-evolucao-1-plan.md
-│   ├── 08-evolucao-1-tasks.md
-│   ├── 09-evolucao-1-implement.md
-│   ├── 10-evolucao-2-specify.md
-│   ├── 11-evolucao-2-plan.md
-│   ├── 12-evolucao-2-tasks.md
-│   └── 13-evolucao-2-implement.md
-└── docs/
-    └── roteiro-treinamento.md
-```
-
----
-
 # Observações finais
 
 Este material foi pensado para facilitar o uso dos prompts durante um treinamento prático.
